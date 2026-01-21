@@ -1,13 +1,19 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>QuickReceipt</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
       /* Base & Typography */
@@ -16,7 +22,8 @@
         --a4-height: 297mm;
       }
 
-      html, body {
+      html,
+      body {
         margin: 0;
         padding: 0;
         background-color: #f1f5f9;
@@ -24,17 +31,19 @@
       }
 
       body {
-        font-family: 'Inter', 'Noto Sans Myanmar', sans-serif;
-        font-feature-settings: "kern" 1, "tnum" 1;
+        font-family: "Inter", "Noto Sans Myanmar", sans-serif;
+        font-feature-settings:
+          "kern" 1,
+          "tnum" 1;
         text-rendering: optimizeLegibility;
         -webkit-font-smoothing: antialiased;
       }
-      
+
       .myanmar-font {
-        font-family: 'Noto Sans Myanmar', sans-serif;
+        font-family: "Noto Sans Myanmar", sans-serif;
         line-height: 1.5;
       }
-      
+
       .hide-scrollbar::-webkit-scrollbar {
         display: none;
       }
@@ -69,7 +78,8 @@
       }
 
       @media print {
-        html, body {
+        html,
+        body {
           width: 210mm;
           height: auto !important;
           overflow: visible !important;
@@ -84,13 +94,13 @@
         .no-print {
           display: none !important;
         }
-        
+
         #receipt-content {
           width: var(--a4-width) !important;
           margin: 0 !important;
           display: block !important;
         }
-        
+
         .a4-container {
           box-shadow: none !important;
           margin: 0 !important;
@@ -100,7 +110,7 @@
           overflow: hidden !important;
           print-color-adjust: exact !important;
         }
-        
+
         .a4-container:last-child {
           page-break-after: avoid !important;
         }
@@ -126,16 +136,17 @@
       }
     </style>
     <script type="importmap">
-    {
-      "imports": {
-        "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-        "react/": "https://esm.sh/react@^19.2.3/",
-        "react": "https://esm.sh/react@^19.2.3"
+      {
+        "imports": {
+          "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+          "react/": "https://esm.sh/react@^19.2.3/",
+          "react": "https://esm.sh/react@^19.2.3"
+        }
       }
-    }
     </script>
   </head>
   <body>
     <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

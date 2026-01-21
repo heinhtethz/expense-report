@@ -1,4 +1,3 @@
-
 export interface SubExpense {
   id: string;
   label: string;
@@ -7,7 +6,7 @@ export interface SubExpense {
 
 export interface JobExpense {
   id: string;
-  type: 'job';
+  type: "job";
   title: string;
   baseAmount: number;
   subExpenses: SubExpense[];
@@ -15,7 +14,7 @@ export interface JobExpense {
 
 export interface SimpleExpense {
   id: string;
-  type: 'simple';
+  type: "simple";
   label: string;
   amount: number;
   date?: string;
@@ -28,6 +27,7 @@ export interface DocumentData {
   name: string;
   date: string;
   advanceAmount: number;
+  advanceDate: string | null;
   expenses: Expense[];
   balanceLabel: string;
 }
