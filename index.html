@@ -7,134 +7,14 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <title>QuickReceipt</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="src/style.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <style>
-      /* Base & Typography */
-      :root {
-        --a4-width: 210mm;
-        --a4-height: 297mm;
-      }
-
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-        background-color: #f1f5f9;
-        -webkit-text-size-adjust: 100%;
-      }
-
-      body {
-        font-family: "Inter", "Noto Sans Myanmar", sans-serif;
-        font-feature-settings:
-          "kern" 1,
-          "tnum" 1;
-        text-rendering: optimizeLegibility;
-        -webkit-font-smoothing: antialiased;
-      }
-
-      .myanmar-font {
-        font-family: "Noto Sans Myanmar", sans-serif;
-        line-height: 1.5;
-      }
-
-      .hide-scrollbar::-webkit-scrollbar {
-        display: none;
-      }
-      .hide-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-
-      /* Preview Layout */
-      #receipt-content {
-        display: block;
-        width: var(--a4-width);
-        margin: 0 auto;
-      }
-
-      .a4-container {
-        width: var(--a4-width);
-        height: var(--a4-height);
-        box-sizing: border-box;
-        background-color: white;
-        padding: 20mm 15mm; /* Standard professional margins */
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        overflow: hidden;
-      }
-
-      /* Print Styles */
-      @page {
-        size: A4 portrait;
-        margin: 0 !important;
-      }
-
-      @media print {
-        html,
-        body {
-          width: 210mm;
-          height: auto !important;
-          overflow: visible !important;
-        }
-
-        body {
-          background-color: white !important;
-          -webkit-print-color-adjust: exact !important;
-          print-color-adjust: exact !important;
-        }
-
-        .no-print {
-          display: none !important;
-        }
-
-        #receipt-content {
-          width: var(--a4-width) !important;
-          margin: 0 !important;
-          display: block !important;
-        }
-
-        .a4-container {
-          box-shadow: none !important;
-          margin: 0 !important;
-          page-break-after: always !important;
-          height: var(--a4-height) !important;
-          width: var(--a4-width) !important;
-          overflow: hidden !important;
-          print-color-adjust: exact !important;
-        }
-
-        .a4-container:last-child {
-          page-break-after: avoid !important;
-        }
-      }
-
-      /* PDF Helper */
-      .html2pdf__page-break {
-        page-break-after: always;
-        display: block;
-      }
-
-      /* Tabular figures for aligned numbers */
-      .tabular-nums {
-        font-variant-numeric: tabular-nums;
-        font-feature-settings: "tnum";
-      }
-
-      /* Column control for 'straight' look */
-      .amount-col {
-        width: 120px;
-        text-align: right;
-        flex-shrink: 0;
-      }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script type="importmap">
       {
         "imports": {

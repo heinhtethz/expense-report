@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+/* Base & Typography */
+:root {
+  --a4-width: 210mm;
+  --a4-height: 297mm;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f1f5f9;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: "Inter", "Noto Sans Myanmar", sans-serif;
+  font-feature-settings:
+    "kern" 1,
+    "tnum" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.myanmar-font {
+  font-family: "Noto Sans Myanmar", sans-serif;
+  line-height: 1.5;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -212,7 +212,7 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
               type="text"
               value={data.headerTitle}
               onChange={(e) => updateField("headerTitle", e.target.value)}
-              className="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
+              className="mt-1 block w-full rounded-md border-slate-300 shadow-sm outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
             />
           </div>
           <div>
@@ -223,7 +223,7 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
               type="text"
               value={data.name}
               onChange={(e) => updateField("name", e.target.value)}
-              className="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
+              className="mt-1 block w-full rounded-md border-slate-300 shadow-sm outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
             />
           </div>
           <div>
@@ -234,7 +234,33 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
               type="date"
               value={data.date}
               onChange={(e) => updateField("date", e.target.value)}
-              className="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
+              className="mt-1 block w-full rounded-md border-slate-300 shadow-sm outline-none focus:ring-1 focus:ring-indigo-500sm:text-sm p-2 border bg-white"
+            />
+          </div>
+          <div className="col-span-2">
+            <label className="block text-sm font-medium text-slate-700">
+              Balance Amount (Bal)
+            </label>
+            <input
+              type="number"
+              value={
+                data.balanceAmount === 0 || data.balanceAmount < 0
+                  ? ""
+                  : data.balanceAmount
+              }
+              onChange={(e) =>
+                updateField(
+                  "balanceAmount",
+                  e.target.value === "" ? 0 : Number(e.target.value),
+                )
+              }
+              className="mt-1 block w-full rounded-md border-slate-300 shadow-sm outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
+            />
+            <input
+              type="date"
+              value={data.balanceDate ? data.balanceDate : ""}
+              onChange={(e) => updateField("balanceDate", e.target.value)}
+              className="mt-1 block w-full rounded-md border-slate-300 shadow-sm outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
             />
           </div>
           <div className="col-span-2">
@@ -243,20 +269,24 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
             </label>
             <input
               type="number"
-              value={data.advanceAmount || ""}
+              value={
+                data.advanceAmount === 0 || data.advanceAmount < 0
+                  ? ""
+                  : data.advanceAmount
+              }
               onChange={(e) =>
                 updateField(
                   "advanceAmount",
                   e.target.value === "" ? 0 : Number(e.target.value),
                 )
               }
-              className="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
+              className="mt-1 block w-full rounded-md border-slate-300 shadow-sm outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
             />
             <input
               type="date"
-              value={data.advanceDate || null}
+              value={data.advanceDate ? data.advanceDate : ""}
               onChange={(e) => updateField("advanceDate", e.target.value)}
-              className="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
+              className="mt-1 block w-full rounded-md border-slate-300 shadow-sm outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
             />
           </div>
         </div>
@@ -300,7 +330,7 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
             data.expenses.map((expense, idx) => (
               <div
                 key={expense.id}
-                className="relative p-4 border rounded-xl bg-white shadow-sm hover:shadow-md transition"
+                className="relative p-4 border border-slate-200 rounded-xl bg-white shadow-sm hover:shadow-md transition"
               >
                 <button
                   onClick={() => removeExpense(expense.id)}
@@ -356,9 +386,12 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
                         className="w-full text-sm border p-2 rounded-lg bg-slate-50 border-slate-200 focus:bg-white transition-all outline-none focus:ring-1 focus:ring-indigo-500"
                       />
                     </div>
-                    <div className="ml-4 space-y-3 pt-2 border-l-2 border-slate-100 pl-4">
-                      {expense.subExpenses.map((sub) => (
-                        <div key={sub.id} className="flex gap-2 items-center">
+                    <div className="lg:ml-4 space-y-3 pt-2 border-l-2 border-slate-100 lg:pl-4">
+                      {expense.subExpenses?.map((sub) => (
+                        <div
+                          key={sub.id}
+                          className="flex lg:gap-2 items-center"
+                        >
                           <input
                             type="text"
                             value={sub.label}
@@ -370,7 +403,7 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
                               );
                               updateExpense(expense.id, { subExpenses: subs });
                             }}
-                            className="flex-1 text-sm border-b p-1 border-slate-100 focus:border-indigo-400 outline-none myanmar-font bg-white"
+                            className="flex-1 text-sm border p-2 rounded-lg border-slate-100 outline-none focus:ring-1 focus:ring-indigo-500 myanmar-font bg-white"
                             placeholder="Label"
                           />
                           <input
@@ -384,7 +417,7 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
                               );
                               updateExpense(expense.id, { subExpenses: subs });
                             }}
-                            className="w-24 text-sm border p-1 rounded bg-slate-50 border-slate-200 outline-none focus:bg-white"
+                            className="w-24 text-sm border p-2 rounded-lg bg-slate-50 border-slate-200 outline-none focus:bg-white focus:ring-1 focus:ring-indigo-500"
                             placeholder="0"
                           />
                           <button
@@ -424,7 +457,7 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
                         onChange={(val) =>
                           updateExpense(expense.id, { label: val })
                         }
-                        className="w-full border p-2 rounded-lg myanmar-font focus:ring-1 focus:ring-indigo-500 outline-none"
+                        className="w-full border border-slate-200 p-2 rounded-lg bg-slate-50 myanmar-font focus:ring-1 focus:ring-indigo-500 outline-none"
                       />
                     </div>
                     <input
@@ -435,7 +468,7 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
                           amount: Number(e.target.value),
                         })
                       }
-                      className="w-full border p-2 rounded-lg bg-slate-50 focus:bg-white transition-all outline-none"
+                      className="w-full border p-2 rounded-lg border-slate-200  bg-slate-50 focus:bg-white transition-all outline-none focus:ring-1 focus:ring-indigo-500"
                       placeholder="Amount"
                     />
                     <input
@@ -444,7 +477,7 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
                       onChange={(e) =>
                         updateExpense(expense.id, { date: e.target.value })
                       }
-                      className="w-full border p-2 rounded-lg bg-slate-50 focus:bg-white transition-all outline-none"
+                      className="w-full border border-slate-200 p-2 rounded-lg bg-slate-50 focus:bg-white transition-all outline-none focus:ring-1 focus:ring-indigo-500"
                     />
                   </div>
                 )}
