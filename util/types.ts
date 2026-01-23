@@ -9,7 +9,7 @@ export interface JobExpense {
   type: "job";
   title: string;
   baseAmount: number;
-  subExpenses: SubExpense[];
+  subExpenses?: SubExpense[];
 }
 
 export interface SimpleExpense {
@@ -26,8 +26,10 @@ export interface DocumentData {
   headerTitle: string;
   name: string;
   date: string;
-  advanceAmount: number;
-  advanceDate: string | null;
+  advanceAmount?: number | null;
+  advanceDate?: string | null;
   expenses: Expense[];
   balanceLabel: string;
+  balanceAmount?: number | null;
+  balanceDate?: string | null;
 }
