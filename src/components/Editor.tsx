@@ -103,7 +103,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className={`${className} min-h-[80px] bg-white`}
+          className={`${className} min-h-20 bg-white`}
         />
       ) : (
         <input
