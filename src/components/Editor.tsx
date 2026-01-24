@@ -4,7 +4,6 @@ import {
   Expense,
   JobExpense,
   SimpleExpense,
-  SubExpense,
 } from "../../util/types";
 
 interface RichTextEditorProps {
@@ -134,9 +133,9 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
     const newJob: JobExpense = {
       id: crypto.randomUUID(),
       type: "job",
-      title: "New Import Job",
+      title: "NEW JOB",
       baseAmount: 0,
-      subExpenses: [],
+      subExpenses: [{ id: "1", label: "MAIL/COPY", amount: 0 }],
     };
     onChange({ ...data, expenses: [...data.expenses, newJob] });
   };
@@ -174,7 +173,7 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
         return {
           ...e,
           subExpenses: [
-            ...e.subExpenses,
+            ...(e.subExpenses ?? []),
             { id: crypto.randomUUID(), label: "New Item", amount: 0 },
           ],
         };
@@ -211,7 +210,9 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
             <input
               type="text"
               value={data.headerTitle}
-              onChange={(e) => updateField("headerTitle", e.target.value)}
+              onChange={(e) =>
+                updateField("headerTitle", e.target.value.toUpperCase())
+              }
               className="mt-1 block w-full rounded-md border-slate-300 shadow-sm outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
             />
           </div>
@@ -222,7 +223,9 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
             <input
               type="text"
               value={data.name}
-              onChange={(e) => updateField("name", e.target.value)}
+              onChange={(e) =>
+                updateField("name", e.target.value.toUpperCase())
+              }
               className="mt-1 block w-full rounded-md border-slate-300 shadow-sm outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
             />
           </div>
@@ -243,6 +246,7 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
             </label>
             <input
               type="number"
+              onWheel={(e) => e.currentTarget.blur()}
               value={
                 data.balanceAmount === 0 || data.balanceAmount < 0
                   ? ""
@@ -269,6 +273,7 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
             </label>
             <input
               type="number"
+              onWheel={(e) => e.currentTarget.blur()}
               value={
                 data.advanceAmount === 0 || data.advanceAmount < 0
                   ? ""
@@ -367,7 +372,7 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
                       value={expense.title}
                       placeholder="Job Title"
                       onChange={(val) =>
-                        updateExpense(expense.id, { title: val })
+                        updateExpense(expense.id, { title: val.toUpperCase() })
                       }
                       className="w-full font-bold text-lg border-b border-transparent focus:border-slate-200 p-1 outline-none"
                     />
@@ -377,6 +382,7 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
                       </span>
                       <input
                         type="number"
+                        onWheel={(e) => e.currentTarget.blur()}
                         value={expense.baseAmount || ""}
                         onChange={(e) =>
                           updateExpense(expense.id, {
@@ -398,7 +404,10 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
                             onChange={(e) => {
                               const subs = expense.subExpenses.map((s) =>
                                 s.id === sub.id
-                                  ? { ...s, label: e.target.value }
+                                  ? {
+                                      ...s,
+                                      label: e.target.value.toUpperCase(),
+                                    }
                                   : s,
                               );
                               updateExpense(expense.id, { subExpenses: subs });
@@ -408,6 +417,7 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
                           />
                           <input
                             type="number"
+                            onWheel={(e) => e.currentTarget.blur()}
                             value={sub.amount || ""}
                             onChange={(e) => {
                               const subs = expense.subExpenses.map((s) =>
@@ -455,13 +465,16 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
                         value={expense.label}
                         placeholder="Description"
                         onChange={(val) =>
-                          updateExpense(expense.id, { label: val })
+                          updateExpense(expense.id, {
+                            label: val.toUpperCase(),
+                          })
                         }
                         className="w-full border border-slate-200 p-2 rounded-lg bg-slate-50 myanmar-font focus:ring-1 focus:ring-indigo-500 outline-none"
                       />
                     </div>
                     <input
                       type="number"
+                      onWheel={(e) => e.currentTarget.blur()}
                       value={expense.amount || ""}
                       onChange={(e) =>
                         updateExpense(expense.id, {
@@ -498,7 +511,9 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
           <input
             type="text"
             value={data.balanceLabel}
-            onChange={(e) => updateField("balanceLabel", e.target.value)}
+            onChange={(e) =>
+              updateField("balanceLabel", e.target.value.toUpperCase())
+            }
             className="mt-1 block w-full rounded-xl border-slate-200 shadow-sm p-3 border myanmar-font bg-white focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all"
           />
         </div>
