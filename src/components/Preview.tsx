@@ -6,6 +6,7 @@ import {
   View,
   StyleSheet,
   PDFViewer,
+  Font,
 } from "@react-pdf/renderer";
 import { DocumentData } from "../../util/types";
 
@@ -29,19 +30,18 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: mm(8),
   },
 
   advBox: {
     paddingVertical: mm(6),
-    textAlign: "center",
+    flexDirection: "column",
+    alignItems: "center",
     fontSize: 14,
     fontWeight: "bold",
     letterSpacing: 1.5,
   },
 
   list: {
-    marginTop: mm(6),
     fontSize: 14,
     fontWeight: "semibold",
   },
@@ -83,11 +83,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
     paddingVertical: 3,
     letterSpacing: 1.5,
+    color: "gray",
   },
 
   footerWrap: {
     position: "absolute",
-    bottom: mm(25),
+    bottom: mm(5),
     right: mm(20),
     width: mm(80),
   },
@@ -99,44 +100,41 @@ const styles = StyleSheet.create({
   },
 
   footerLabel: {
-    fontSize: 14,
+    color: "gray",
     letterSpacing: 1.5,
+    fontSize: 14,
     fontWeight: "semibold",
   },
 
   footerValue: {
-    fontSize: 14,
+    color: "gray",
     letterSpacing: 1.5,
+    fontSize: 14,
     fontWeight: "semibold",
   },
 
   balanceBox: {
-    borderTopWidth: 2,
+    borderTopWidth: 1,
     borderTopColor: "#000",
-    paddingTop: mm(6),
-    marginTop: mm(4),
+    paddingTop: mm(2),
   },
 
   balanceRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-end",
+    fontWeight: "bold",
+    fontSize: 14,
+    letterSpacing: 1.5,
   },
 
-  balanceLabel: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
+  balanceLabel: {},
 
-  balanceValue: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
+  balanceValue: {},
 
   pageNumber: {
     position: "absolute",
-    bottom: mm(10),
-    right: mm(20),
+    right: mm(10),
+    top: mm(5),
     fontSize: 9,
     color: "#666",
   },
@@ -144,15 +142,18 @@ const styles = StyleSheet.create({
 
 export const Preview = ({ data }: { data: DocumentData }) => {
   const total = data.expenses.reduce((acc, curr) => {
-    if (curr.type === "job") {
+    if (curr.type === "job" && curr.subExpenses) {
       const sub = curr.subExpenses?.reduce((s, c) => s + c.amount, 0);
       return acc + curr.baseAmount + sub;
+    }
+    if (curr.type === "job") {
+      return acc + curr.baseAmount;
     }
     return curr.type === "simple" ? acc + curr.amount : acc;
   }, 0);
 
   const balanceAdvance = data.balanceAmount + data.advanceAmount;
-  const balance = balanceAdvance - total;
+  const balance = balanceAdvance || total ? balanceAdvance - total : 0;
 
   const formatDate = (d?: string) => {
     if (!d) return "";
@@ -218,7 +219,7 @@ export const Preview = ({ data }: { data: DocumentData }) => {
           </View>
 
           {/* Expense List */}
-          <View style={styles.list}>
+          <View style={styles.list} wrap={true}>
             {data.expenses.map((expense, idx) => {
               const no = idx + 1;
 
@@ -261,8 +262,7 @@ export const Preview = ({ data }: { data: DocumentData }) => {
           </View>
 
           {/* Footer — only on LAST PAGE */}
-          {/* Footer – bottom right (fixed) */}
-          <View fixed style={styles.footerWrap}>
+          <View style={styles.footerWrap} wrap={false}>
             {/* TOTAL */}
             <View style={styles.footerRow}>
               <Text style={styles.footerLabel}>TOTAL</Text>
@@ -271,9 +271,9 @@ export const Preview = ({ data }: { data: DocumentData }) => {
 
             {/* ADV */}
             <View style={styles.footerRow}>
-              <Text style={styles.footerLabel}>ADV</Text>
+              <Text style={styles.footerLabel}>ADVANCE</Text>
               <Text style={styles.footerValue}>
-                {(data.advanceAmount || 0).toLocaleString()}/-
+                {(balanceAdvance || 0).toLocaleString()}/-
               </Text>
             </View>
 

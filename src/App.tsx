@@ -55,11 +55,11 @@ const App: React.FC = () => {
       <aside
         className={`w-full lg:w-[50%] shrink-0 bg-white lg:border-r border-slate-200 flex flex-col shadow-2xl transition-all h-full ${viewMode === "preview" ? "hidden lg:flex" : "flex"}`}
       >
-        <header className="p-6 bg-slate-900 text-white flex items-center justify-between relative">
+        <header className="p-2 bg-slate-900 text-white flex items-center justify-between relative">
           <div>
-            <h1 className="text-xl font-bold tracking-tight">QuickReceipt</h1>
+            <h1 className="text-lg font-bold tracking-tight">QuickReceipt</h1>
             <p className="text-[10px] text-indigo-400 font-bold uppercase tracking-[0.2em] mt-0.5">
-              Professional Studio
+              Professional Studio By Hz
             </p>
           </div>
 
