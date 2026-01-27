@@ -256,10 +256,10 @@ export const Preview = ({ data }: { data: DocumentData }) => {
       <div style={{ padding: "10px", textAlign: "center" }}>
         <a
           href={instance.url || "#"}
-          download="document.pdf"
+          download={`${data.date}/expense.pdf`}
           style={{
-            padding: "10px 20px",
-            background: "blue",
+            padding: "10px 10px",
+            background: "navy",
             color: "white",
             borderRadius: "5px",
           }}
