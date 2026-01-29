@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Document,
   Page,
@@ -256,7 +256,7 @@ export const Preview = ({ data }: { data: DocumentData }) => {
       <div style={{ padding: "10px", textAlign: "center" }}>
         <a
           href={instance.url || "#"}
-          download={`${data.date}/expense.pdf`}
+          download={`${formatDate(data.date)}_expense.pdf`}
           style={{
             padding: "10px 10px",
             background: "navy",
