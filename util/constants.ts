@@ -9,33 +9,24 @@ export const INITIAL_DATA: DocumentData = {
   balanceLabel: "BALANCE",
   expenses: [
     {
-      id: "1",
+      id: crypto.randomUUID(),
       type: "job",
-      title: "IMP: EASTAR (601 RO) 1 * 40'",
-      baseAmount: 107000,
+      title: "IMP: NEW IMPORT JOB",
+      baseAmount: 0,
       subExpenses: [
-        { id: "1", label: "MAIL/COPY", amount: 2000 },
+        { id: "1", label: "MAIL/COPY", amount: 3000 },
         { id: "2", label: "SURVEY", amount: 2000 },
+        { id: "3", label: "TRUCK IN", amount: 1000 },
       ],
     },
     {
-      id: "2",
-      type: "job",
-      title: "IMP: RONG DA (207 PK) 1 * 20'",
-      baseAmount: 57000,
-      subExpenses: [
-        { id: "1", label: "MAIL/COPY", amount: 2000 },
-        { id: "2", label: "SURVEY", amount: 2000 },
-      ],
-    },
-    {
-      id: "3",
+      id: crypto.randomUUID(),
       type: "simple",
       label: "TAXI",
       amount: 12000,
     },
     {
-      id: "4",
+      id: crypto.randomUUID(),
       type: "simple",
       label: "CLAIM",
       amount: 14000,
