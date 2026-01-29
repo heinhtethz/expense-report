@@ -1,123 +1,16 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   DocumentData,
   Expense,
   JobExpense,
   SimpleExpense,
 } from "../../util/types";
-
-interface RichTextEditorProps {
-  value: string;
-  onChange: (val: string) => void;
-  className?: string;
-  placeholder?: string;
-  isTextArea?: boolean;
-}
-
-const RichTextEditor: React.FC<RichTextEditorProps> = ({
-  value,
-  onChange,
-  className,
-  placeholder,
-  isTextArea,
-}) => {
-  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
-
-  const applyFormat = (tag: string) => {
-    const input = inputRef.current;
-    if (!input) return;
-
-    const start = input.selectionStart || 0;
-    const end = input.selectionEnd || 0;
-    const selection = input.value.substring(start, end);
-
-    const before = input.value.substring(0, start);
-    const after = input.value.substring(end);
-    const newValue = `${before}<${tag}>${selection}</${tag}>${after}`;
-    onChange(newValue);
-
-    setTimeout(() => {
-      input.focus();
-      if (selection) {
-        const newStart = start;
-        const newEnd = start + (tag.length * 2 + 5) + selection.length;
-        input.setSelectionRange(newStart, newEnd);
-      } else {
-        const cursorPosition = start + tag.length + 2;
-        input.setSelectionRange(cursorPosition, cursorPosition);
-      }
-    }, 0);
-  };
-
-  return (
-    <div className="flex flex-col gap-1 group">
-      <div className="flex gap-1 opacity-0 group-focus-within:opacity-100 transition-opacity">
-        <button
-          type="button"
-          onMouseDown={(e) => {
-            e.preventDefault();
-            applyFormat("b");
-          }}
-          className="w-6 h-6 flex items-center justify-center text-[10px] font-bold border rounded bg-white hover:bg-slate-50 shadow-sm border-slate-300"
-          title="Bold (<b>)"
-        >
-          B
-        </button>
-        <button
-          type="button"
-          onMouseDown={(e) => {
-            e.preventDefault();
-            applyFormat("i");
-          }}
-          className="w-6 h-6 flex items-center justify-center text-[10px] italic border rounded bg-white hover:bg-slate-50 shadow-sm border-slate-300"
-          title="Italic (<i>)"
-        >
-          I
-        </button>
-        <button
-          type="button"
-          onMouseDown={(e) => {
-            e.preventDefault();
-            applyFormat("u");
-          }}
-          className="w-6 h-6 flex items-center justify-center text-[10px] underline border rounded bg-white hover:bg-slate-50 shadow-sm border-slate-300"
-          title="Underline (<u>)"
-        >
-          U
-        </button>
-        <button
-          type="button"
-          onMouseDown={(e) => {
-            e.preventDefault();
-            applyFormat("s");
-          }}
-          className="w-6 h-6 flex items-center justify-center text-[10px] line-through border rounded bg-white hover:bg-slate-50 shadow-sm border-slate-300"
-          title="Strikethrough (<s>)"
-        >
-          S
-        </button>
-      </div>
-      {isTextArea ? (
-        <textarea
-          ref={inputRef as React.RefObject<HTMLTextAreaElement>}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-          className={`${className} min-h-20 bg-white`}
-        />
-      ) : (
-        <input
-          ref={inputRef as React.RefObject<HTMLInputElement>}
-          type="text"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-          className={`${className} bg-white`}
-        />
-      )}
-    </div>
-  );
-};
+import {
+  newExportExamJob,
+  newExportJob,
+  newImportExamJob,
+  newImportJob,
+} from "../../util/constants";
 
 interface EditorProps {
   data: DocumentData;
@@ -125,19 +18,26 @@ interface EditorProps {
 }
 
 export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
+  const [showJobTemplate, setShowJobTemplate] = useState(false);
   const updateField = (field: keyof DocumentData, value: any) => {
     onChange({ ...data, [field]: value });
   };
 
-  const addJob = () => {
-    const newJob: JobExpense = {
+  const addJob = (index: number) => {
+    const jobTemplate = [
+      newImportJob,
+      newExportJob,
+      newImportExamJob,
+      newExportExamJob,
+    ];
+
+    const template = jobTemplate[index];
+    const job = {
+      ...template,
       id: crypto.randomUUID(),
-      type: "job",
-      title: "NEW JOB",
-      baseAmount: 0,
-      subExpenses: [{ id: "1", label: "MAIL/COPY", amount: 0 }],
     };
-    onChange({ ...data, expenses: [...data.expenses, newJob] });
+    onChange({ ...data, expenses: [...data.expenses, job] });
+    setShowJobTemplate(false);
   };
 
   const addSimple = () => {
@@ -209,9 +109,9 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
             </label>
             <input
               type="text"
-              value={data.headerTitle}
+              value={data.port}
               onChange={(e) =>
-                updateField("headerTitle", e.target.value.toUpperCase())
+                updateField("port", e.target.value.toUpperCase())
               }
               className="mt-1 block w-full rounded-md border-slate-300 shadow-sm outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
             />
@@ -240,9 +140,9 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
               className="mt-1 block w-full rounded-md border-slate-300 shadow-sm outline-none focus:ring-1 focus:ring-indigo-500sm:text-sm p-2 border bg-white"
             />
           </div>
-          <div className="col-span-2">
+          <div>
             <label className="block text-sm font-medium text-slate-700">
-              Balance Amount (Bal)
+              Balance Amount
             </label>
             <input
               type="number"
@@ -258,8 +158,13 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
                   e.target.value === "" ? 0 : Number(e.target.value),
                 )
               }
-              className="mt-1 block w-full rounded-md border-slate-300 shadow-sm outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
+              className="mt-1 w-full rounded-md border-slate-300 shadow-sm outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700">
+              Balance Date
+            </label>
             <input
               type="date"
               value={data.balanceDate ? data.balanceDate : ""}
@@ -267,9 +172,9 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
               className="mt-1 block w-full rounded-md border-slate-300 shadow-sm outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
             />
           </div>
-          <div className="col-span-2">
-            <label className="block text-sm font-medium text-slate-700">
-              Advance Amount (Adv)
+          <div>
+            <label className="text-sm font-medium text-slate-700">
+              Advance Amount
             </label>
             <input
               type="number"
@@ -285,13 +190,18 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
                   e.target.value === "" ? 0 : Number(e.target.value),
                 )
               }
-              className="mt-1 block w-full rounded-md border-slate-300 shadow-sm outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
+              className="mt-1 w-full rounded-md border-slate-300 shadow-sm outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
             />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-slate-700">
+              Advance Date
+            </label>
             <input
               type="date"
               value={data.advanceDate ? data.advanceDate : ""}
               onChange={(e) => updateField("advanceDate", e.target.value)}
-              className="mt-1 block w-full rounded-md border-slate-300 shadow-sm outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
+              className="mt-1 w-full rounded-md border-slate-300 shadow-sm outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm p-2 border bg-white"
             />
           </div>
         </div>
@@ -308,13 +218,43 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
               Clear All
             </button>
           </div>
-          <div className="flex gap-2">
+          <div className="relative flex gap-2">
             <button
-              onClick={addJob}
+              onClick={() => setShowJobTemplate(!showJobTemplate)}
               className="flex-1 text-xs bg-indigo-600 text-white px-3 py-2 rounded-lg font-bold hover:bg-indigo-700 transition shadow-sm"
             >
               + Add Job
             </button>
+
+            {showJobTemplate && (
+              <div className="absolute left-0 top-10 mt-2 w-48 bg-white rounded-xl shadow-2xl border border-slate-200 py-2 z-100">
+                <button
+                  onClick={() => addJob(0)}
+                  className="w-full text-left px-4 py-2 text-xs font-bold text-slate-700 hover:text-slate-400 transition-colors"
+                >
+                  Add Import Job
+                </button>
+                <button
+                  onClick={() => addJob(1)}
+                  className="w-full text-left px-4 py-2 text-xs font-bold text-slate-700 hover:text-slate-400 transition-colors"
+                >
+                  Add Export Job
+                </button>
+                <button
+                  onClick={() => addJob(2)}
+                  className="w-full text-left px-4 py-2 text-xs font-bold text-slate-700 hover:text-slate-400 transition-colors"
+                >
+                  Add Import Exam Job
+                </button>
+                <button
+                  onClick={() => addJob(3)}
+                  className="w-full text-left px-4 py-2 text-xs font-bold text-slate-700 hover:text-slate-400 transition-colors"
+                >
+                  Add Export Exam Job
+                </button>
+              </div>
+            )}
+
             <button
               onClick={addSimple}
               className="flex-1 text-xs bg-slate-600 text-white px-3 py-2 rounded-lg font-bold hover:bg-slate-700 transition shadow-sm"
@@ -334,7 +274,7 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
           ) : (
             data.expenses.map((expense, idx) => (
               <div
-                key={expense.id}
+                key={idx}
                 className="relative p-4 border border-slate-200 rounded-xl bg-white shadow-sm hover:shadow-md transition"
               >
                 <button
@@ -368,11 +308,13 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
                 </div>
                 {expense.type === "job" ? (
                   <div className="space-y-4">
-                    <RichTextEditor
+                    <textarea
                       value={expense.title}
                       placeholder="Job Title"
-                      onChange={(val) =>
-                        updateExpense(expense.id, { title: val.toUpperCase() })
+                      onChange={(e) =>
+                        updateExpense(expense.id, {
+                          title: e.target.value.toUpperCase(),
+                        })
                       }
                       className="w-full font-bold text-lg border-b border-transparent focus:border-slate-200 p-1 outline-none"
                     />
@@ -461,12 +403,12 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
                 ) : (
                   <div className="grid grid-cols-2 gap-3">
                     <div className="col-span-2">
-                      <RichTextEditor
+                      <input
                         value={expense.label}
                         placeholder="Description"
-                        onChange={(val) =>
+                        onChange={(e) =>
                           updateExpense(expense.id, {
-                            label: val.toUpperCase(),
+                            label: e.target.value.toUpperCase(),
                           })
                         }
                         className="w-full border border-slate-200 p-2 rounded-lg bg-slate-50 myanmar-font focus:ring-1 focus:ring-indigo-500 outline-none"

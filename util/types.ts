@@ -23,7 +23,7 @@ export interface SimpleExpense {
 export type Expense = JobExpense | SimpleExpense;
 
 export interface DocumentData {
-  headerTitle: string;
+  port: string;
   name: string;
   date: string;
   advanceAmount?: number | null;
