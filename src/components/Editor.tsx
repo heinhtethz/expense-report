@@ -442,7 +442,7 @@ export const Editor: React.FC<EditorProps> = ({ data, onChange }) => {
         </div>
       </div>
 
-      <div className="space-y-4 pt-4 pb-12">
+      <div className="space-y-4 pt-4 pb-20">
         <h2 className="text-xl font-bold text-slate-800 border-b pb-2">
           Footer Customization
         </h2>
