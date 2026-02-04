@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { usePDF } from "@react-pdf/renderer";
 import { DocumentData } from "../../util/types";
-import { MyDocument } from "./mydocument";
+import { MyDocument } from "./MyDocument";
 
 // 2. Main Preview Component
 export const Preview = ({ data }: { data: DocumentData }) => {
